@@ -1,0 +1,87 @@
+% Also note that the "draftcls" or "draftclsnofoot", not "draft", option
+% should be used if it is desired that the figures are to be displayed in
+% draft mode.
+%
+\documentclass[12pt]{article}
+\usepackage{cite}
+\usepackage{fullpage}
+\usepackage{hyperref}
+
+\usepackage{ifpdf}
+
+\ifpdf
+   \usepackage[pdftex]{graphicx}
+  % declare the path(s) where your graphic files are
+  \graphicspath{{../pdf/}{../jpeg/}}
+  % and their extensions so you won't have to specify these with
+  % every instance of \includegraphics
+   \DeclareGraphicsExtensions{.pdf,.jpeg,.png}
+  \hypersetup{pdfborder = 0 0 0}
+\else
+  % or other class option (dvipsone, dvipdf, if not using dvips). graphicx
+  % will default to the driver specified in the system graphics.cfg if no
+  % driver is specified.
+   \usepackage[dvips]{graphicx}
+  % declare the path(s) where your graphic files are
+   \graphicspath{{../eps/}}
+  % and their extensions so you won't have to specify these with
+  % every instance of \includegraphics
+   \DeclareGraphicsExtensions{.eps}
+\fi
+
+\usepackage[cmex10]{amsmath}
+\interdisplaylinepenalty=2500
+
+\usepackage{array}
+
+%% You should use natbib
+\IfFileExists{natbib.sty}{%
+\usepackage{natbib}%
+}{}
+
+
+%% You want microtype.
+\IfFileExists{microtype.sty}{%
+\usepackage[protrusion=true,expansion=true]{microtype}%
+}{}
+
+\usepackage{mdwmath}
+\usepackage{mdwtab}
+
+\usepackage{eqparbox}
+
+\usepackage[caption=false,font=footnotesize]{subfig}
+
+\usepackage{url}
+%% Substitute your favorite serif and sans fonts here....
+\IfFileExists{tgpagella.sty}{%
+% TeX Gyre pagella, like Palatino
+\usepackage{tgpagella}%
+}{}
+
+\usepackage{eulervm}
+
+
+\hyphenation{op-tical net-works semi-conduc-tor}
+
+
+\begin{document}
+%
+% paper title
+% can use linebreaks \\ within to get better formatting as desired
+\title{Closed-form calculation of DC link Harmonics}
+\author{Adam Shea}
+
+
+% make the title area
+\maketitle
+
+\input{abstract.tex}
+
+\input{DC_harmonics.tex}
+
+
+% that's all folks
+\end{document}
+
+

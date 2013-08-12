@@ -1,8 +1,14 @@
 \section{Introduction}
-Investigating harmonic contributions of oscillator tolerance (~50ppm) would be difficult if not intractable using standard FFT-based methods due to the requirement to simulate seconds of data at MHz sampling rates in order to get acceptable resolution.
+Investigating harmonic contributions of oscillator tolerance (~50ppm) would be
+difficult if not intractable using standard FFT-based methods due to the
+requirement to simulate seconds of data at MHz sampling rates in order to get
+acceptable resolution.
 To cope with this, we compute a closed form of the DC-link current spectral content.
 DC-link capacitor sizing is driven by the harmonic content of the DC-link current.
-Usually various standins are used such as ripple voltage or a rule of thumb factor based on converter output current, but these crude methods make significant assumptions based on electrolytic capacitor current handling and standard-3-phase inverter or rectifier topologies.
+Usually various standins are used such as ripple voltage or a rule of thumb
+factor based on converter output current, but these crude methods make
+significant assumptions based on electrolytic capacitor current handling and
+standard-3-phase inverter or rectifier topologies.
 As DC-link capacitor sizing dominates converter size, optimal capacitor choice is important.
 
 \section{Teh Maths}
@@ -13,6 +19,18 @@ carrier and modulation per-unit phase respectively.
 This gives us a 2D function of current as shown in \autoref{fig:current_cell}.
 This function can be defined as a piecewise surface
 \autoref{eq:current}.
+
+\begin{equation}
+\label{eq:current}
+I_{ph} (t) = 
+	\begin{cases}
+	I_pk \cos \left({\omega_{0} t + \theta_{pf}}\right) 
+	& \text{if } 1 + M \cos\left({\omega_{0} t}\right)
+	\leq t \leq 1 - M \cos\left({\omega_{0} t}\right),
+	\\
+	0 & \text{else}
+	\end{cases}
+\end{equation}
 
 \subsection{Fourier Integral}
 We then can calculate the 

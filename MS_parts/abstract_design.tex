@@ -2,7 +2,23 @@
 
 \section{Control Topology}
 
+
 \subsection{Non-synchronized PWM}
+While control states may be managed between modular drive processors with only
+moderate difficulty, the classical assumption that all PWM carriers are
+synchronized presents significant difficulty as a delay of only a few
+microseconds represents a significant phase delay.
+Thankfully, at normal carrier to fundamental ratios, the phase of the PWM
+carrier is unimportant to a first order as the machine inductance filters out
+the high frequency switching components.
+Quartz crystal-based main oscillators are quite stable and allow frequency
+tolerance below 100ppm without any special calibration.
+For a 20kHz PWM system, the beat frequency between PWM carriers will be at a
+frequency of 2Hz.
+This beat frequency will manifest as a peaking of the $\frac{dV}{dt}$ applied
+to the machine windings relative to the frame every 0.5s.
+While this phenomenon has little effect on the control of the machine, the
+effects on bearing currents and insulation lifetime have not been investigated.
 
 \subsection{Fault Management}
 
@@ -13,3 +29,22 @@
 \subsection{Capacitor Sizing}
 
 \section{Peak Ratings}
+
+Electric machine and drive system ratings are influenced by a variety of
+factors.
+While continuous ratings for rated operating conditions are well defined and
+easily modeled and tested, peak ratings are dependent on definitions.
+The determination of peak ratings is further complicated by marketing
+influences in that a large "peak power" number is an easily quoted figure of
+merit even if it has little real-world backing.
+
+The peak rating of an electric drive system is driven by a number of factors
+depending on the peak time required.
+For peak times on the order of one electrical cycle, the power limit is driven
+by the saturation current allowed by the power switches and the
+demagnetization limit of the permanent magnets in the electric machine.
+Both of these limits are effected by the starting temperature of the
+electrical drive system, but are largely independent of other thermal effects
+as the peak time is too short.
+
+

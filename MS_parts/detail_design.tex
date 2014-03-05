@@ -1,10 +1,120 @@
 \chapter{Detailed Design}
+In this chapter I describe in detail the design of the modular motor drive
+modules and system.
+In the sections that follow, the specific design choices and design drivers
+are outlined and schematic sections are presented.
+Overall drive component schematics and PCB layouts are contained in Appendix
+\ref{appCAD}.
+
+\section{Mechanical Layout}
+An important part of any integrated converter design is the mechanical layout
+and packaging or as some would say: "multiphysics integration".
+For this integrated modular drive design, the converter and all its controls
+will be mounted on the end of a 6-phase machine designed at 1/3 scale but full
+diameter for the FreedomCar/USDrive specification.
+
+In order to shield the drive from EMI and fringing fields from the machine,
+the drive is mounted on a stainless steel baseplate of the same footprint as
+the stator.
+The drive consists of six phase drive modules which mount over the
+corresponding two stator tooth section of the machine.
+Each module is one sixth of the stator circumference.
+In order to allow easy fabrication each module consists of two printed circuit
+boards with bolt together interconnects which both allows for low-resistance
+connection for high-current paths and the ability to quickly change out
+damaged modules in case of faults.
+
+Cooling is designed to be possible with either water or air.
+In this case water cooling is used as the machine is already cooled with a
+water jacket.
+The drive modules plumbed in series, upstream of the machine cooling water
+jacket.
 
 \section{Gate Drivers}
+Gate drive design for a tightly integrated motor drive is primarily driven by
+a need for small size and high output current.
+In this design, the DC-Link voltage is less than 400V which allows the use of
+commercial integrated bootstrap gate driver chips.
+
+The FAN7390 integrated bootstrap gate driver was chosen as it supplies peak
+switching currents of more than 4 amps and handles undervoltage lockouts to
+ensure safe startup.
+This device is supplied in an 8 pin SOIC package and requires an external
+diode and bootstrap capacitor for high side supply.
+The temperature rating is for less than 150C junction temperature which
+requires less than 300mW of power dissipation in order to allow full
+temperature range operation in this design.
+Gate turn on and turn off is controlled through the use of a 10 Ohm turn on
+resistor with a turn off diode to help guard against shoot-through and ensure
+that Miller current injection cannot turn on the IGBTs.
+
+Power stage desaturation is measured on the low side by use of a diode clamped
+connection to the switching node tied to the 15V gate supply.
+This signal is then buffered by a P-channel MOSFET before being fed into a
+digital input to the DSP.
+In the case of lower switch desaturation, this input will remain low which
+indicates to the software that a fault has occurred.
+In the case of high side desaturation, the fault can only be detected if the
+switching node voltage drops below 15V.
+This sensor can also detect shorted power switches within one switching cycle
+due to state mismatch with the gate drive commands.
 
 \section{Power Module}
+While the power rating for this design is only 18kW, the system design was
+implemented with higher power ratings in mind.
+To this end, a small PCB was made to carry two discrete 600V IGBT-diode
+CoPacks, an RTC temperature sensor and a phase current busbar.
+This module mimics standard half-bridge IGBT modules from suppliers like
+Powerex and Semikron at a smaller footprint and power rating more in line with
+the design goals of this system.
+The power module attaches to the control board by way of two bolt-down
+connections for the DC-Link and an 8 pin 100 mil header for gate connections
+and temperature sensing.
+The phase conductor busbar is used as part of the current sensing system
+described in the next section.
+This module is then strapped to the heatsink using a fiberglass clamp to cool
+the IGBTs.
+The design here allows for either air or water cooling though water cooling
+with a low cost video card water block was implemented during construction.
 
 \section{Current Sensing}
+Current sensing in this modular design was primarily driven by availability
+and ease of integration.
+While closed-loop sensors are most common for high performance motor drives,
+their requirement of encircling the phase conductor to be sensed meant that
+integration and easily disassembly would be difficult.
+Giant Magnetoresistive (GMR) sensors were also considered as they provide very
+small packages with excellent frequency response and dynamic range.
+GMR sensors however are more immature in the current sensing space and the
+unipolar nature of the sensor means that significant support is needed in
+terms of biasing and signal processing.
+The lack of a polished current sensing solution based on GMRs ruled them out
+of this design.
+
+The current sensing design for the integrated modular motor drive was finally
+chosen to be an open-loop hall effect field sensor.
+The FHS 40-P device from LEM is a small SOIC-8 packaged device with minimal
+signal conditioning circuitry which is both low-cost and readily available.
+In order to use this device, it must be mounted on an area of PCB with an open
+aperture in the ground plane beneath it as is shown in figure
+\ref{figHallPCB}.
+The current in a conductor mounted a fixed distance away is then sensed by
+measuring the magnetic field impinging on the sensor.
+
+The spacing between the sensor and current carrying conductor is managed by
+the bolt-together standoffs between the controller board and the power
+semiconductor module.
+
+Using a free-space field sensor in an application tightly integrated with an
+electric machine presents special challenges which were only exacerbated by
+the rotor in this machine being three times the length of the stator.
+In order to ensure current sensing was not contaminated by offsets and noise
+from the machine below, the baseplate was chosen of a semi-ferromagnetic
+material (304 Stainless Steel) in order to shield low-frequency magnetic
+fields from the sensor.
+The copper faceplate of the water block directly below the power semiconductor
+module adds a further layer of shielding, using eddy currents to block higher
+frequency interfering fields from the sensor.
 
 \section{DSP}
 

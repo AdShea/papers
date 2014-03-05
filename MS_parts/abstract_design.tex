@@ -16,20 +16,117 @@ tolerance below 100ppm without any special calibration.
 For a 20kHz PWM system, the beat frequency between PWM carriers will be at a
 frequency of 2Hz.
 This beat frequency will manifest as a peaking of the $\frac{dV}{dt}$ applied
-to the machine windings relative to the frame every 0.5s.
+to the machine windings relative to the frame every 0.5s or longer depending
+on the specific spread of oscillator frequencies.
 While this phenomenon has little effect on the control of the machine, the
 effects on bearing currents and insulation lifetime have not been investigated.
 
 \subsection{Fault Management}
+A detailed consideration of fault management has been reserved for future work, but 
 
 \section{DC-Link Design}
+DC-link design is a topic that is often overlooked in converter design.
+Usually it is relegated to rules-of-thumb which are often based on sound
+reasoning, but typically end up being used in situations where the assumptions
+they are based on do not hold.
+
+The first of these rules is to size DC-Link capacitors based on a certain
+capacity per Watt of converter power rating.
+This rule is extremely easy to apply, but is typically based on the assumption
+of DC-Link currents being dominated by the 120Hz or 180Hz current ripple of a
+single-phase or 6-pulse diode rectifier.
+This rule also is specific to one voltage level as the ripple current and thus
+capacitance requirement is decreased as the inverse of the DC-link voltage.
+If not driven by controls requirements on DC-link voltage variation, this rule
+also assumes specific current handling capabilities of the capacitor
+(Typically electrolytic).
+
+The next common rule is to design based on an allowed voltage ripple.
+This rule is significantly more robust than the converter-power based rule
+above as it takes into account varying ripple current conditions.
+This rule is also often dictated by the controls design as control accuracy
+will suffer if the DC-Link voltage variation is not decoupled.
+
+A final rule of thumb is to size the DC-link capacitance to be thermally rated
+for a ripple current that is a given fraction of the converter's rated output
+current (typically one third for common 3-phase converters).
+This is a very robust rule in terms of managing component lifetime, but may
+cause excess DC-Link voltage ripple if polymer film-based capacitors are used
+due to their excellent current handling capability even at low capacitance
+ratings.
+
+These three rules all encapsulate both their driving assumptions the two
+actual drivers of DC-link design.
+
+First, whatever design is chosen must be capable of handling ripple-related
+thermal loads.
+This is a function of both dielectric heating effects and joule
+losses in capacitors and inductors.
+As capacitor technology advances with
+improvements in film capacitors and upcoming dielectric materials such as
+glass, designs based on thermal capability will become more necessary.
+
+Second, a DC-link structure is at its core an impedance matching component
+which must present a low impedance to the power converter's switching pole
+at the switching frequency and higher, must present a low impedance at twice
+the power frequency due to reactive power handling requirements, and must
+present a high impedance at DC in order to ensure that bulk power flow comes
+from the power source.
+
+While this is typically handled with bulk capacitance for standard VSI-based
+designs, the size and temperature constraints of the integrated modular motor
+drive require a more creative hybrid approach.
+An interesting aside is that resonant-link converters fully exploit this
+requirement to reduce switching losses and reactive component size.
 
 \subsection{Interconnect Design}
+For the integrated modular motor drive, we cannot tolerate the low temperature
+ratings of electrolytic capacitors.
+Because of this limitation, the total bulk capacitance available is much lower
+than would typically be used in a converter of this size.
+Furthermore, due to the distributed nature of the converter, reactive power
+currents must be passed through the DC-link structure to other modules before
+returning to the machine.
+In order to maintain an effective low impedance at the power frequency for
+reactive power while shielding these currents from the power source, a
+star-and-ring topology was chosen as described in previous work on IMMD power
+electronics.
+
+While this ring-and-star approach is very effective at handling
+power-frequency harmonics, it does not keep a stiff DC-link at the switching
+frequency and higher.
+In order to accomplish this, I chose a frequency-splitting technique similar
+to what is used in high performance logic decoupling.
+To this end, the DC-link capacitance is split into three parts on each module:
+A bulk polyproylene film capacitor, a pair of multilayer ceramic capacitors,
+and an integrated PCB capacitor.
+
 
 \subsection{Capacitor Sizing}
+Capacitor sizing was based entirely on current handling capability and size
+constraints.
+As power-frequency components are being primarily handled by the DC-Link
+interconnect we require little capacitance to manage reactive power flow.
+For the bulk DC-link capacitance, a 700V 20$\mu F$ film capacitor from TDK was
+chosen as it can handle nearly the entire ripple current of a phase at rated
+load.
+This capacitor will be absorbing the kHz range ripple from the converter
+switching.
+The ceramic capacitors were chosen for high-voltage, low-inductance, and low
+dielectric loss.
+As these capacitors are placed directly on the DC terminals of the power
+modules, they will be handling the MHz range power frequencies caused by
+switching edges.
+Finally, the PCB itself was designed with nearly uniterrupted power planes
+which provided each board with 1nF of somewhat lossy capacitance at very low
+inductance which ensured that >10MHz ripple would not be injected into the
+other capacitors.
+
+This multi-layer design allowed for low impedance with reduced overall
+capacitor size as is shown in the results section.
+
 
 \section{Peak Ratings}
-
 Electric machine and drive system ratings are influenced by a variety of
 factors.
 While continuous ratings for rated operating conditions are well defined and
@@ -47,4 +144,17 @@ Both of these limits are effected by the starting temperature of the
 electrical drive system, but are largely independent of other thermal effects
 as the peak time is too short.
 
-
+For the FreedomCar/USDrive specification, peak power rating is defined as an
+83\% overload for 18 seconds.
+This overload time is of the same order as machine thermal time constants.
+From a converter sizing standpoint, this overload rating requires that the
+power switches are capable of handling the full overload power as they have
+sub-second thermal time consents.
+The remainder of the converter design however only needs to be rated to the
+continuous load as capacitor and interconnect thermal time constants are
+measured in minutes or longer.
+The cooling system for the power converter must be able to handle
+approximately the same overload as the machine as the extra cooling load from
+the power semiconductors will increase in proportion to output power.
+Finally, sensing must be able to accommodate the full overload if control is to
+be maintained during overloaded conditions.

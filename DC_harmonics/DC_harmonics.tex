@@ -9,7 +9,8 @@ Usually various standins are used such as ripple voltage or a rule of thumb
 factor based on converter output current, but these crude methods make
 significant assumptions based on electrolytic capacitor current handling and
 standard-3-phase inverter or rectifier topologies.
-As DC-link capacitor sizing dominates converter size, optimal capacitor choice is important.
+As DC-link capacitor sizing dominates converter size, optimal capacitor choice
+is important.
 
 \section{Teh Maths}
 Closed form calculation of the harmonics of asymmetrical sine-triangle PWM for
@@ -25,15 +26,15 @@ This function can be defined as a piecewise surface
 I_{ph} (t) = 
 	\begin{cases}
 	I_pk \cos \left({\omega_{0} t + \theta_{pf}}\right) 
-	& \text{if } 1 + M \cos\left({\omega_{0} t}\right)
-	\leq t \leq 1 - M \cos\left({\omega_{0} t}\right),
+	& \text{if } \frac{\pi}{2}\left[{1 + M \cos\left({\omega_{0} t}\right)}\right]
+	\leq t \leq \frac{-\pi}{2}\left[{1 + M \cos\left({\omega_{0} t}\right)}\right],
 	\\
 	0 & \text{else}
 	\end{cases}
 \end{equation}
 
 \subsection{Fourier Integral}
-We then can calculate the 
+We then can calculate the Fourier time integral by splitting into two parts
 
 \section{Conclusion}
 The conclusion goes here.

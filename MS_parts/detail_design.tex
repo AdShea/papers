@@ -48,6 +48,7 @@ Gate turn on and turn off is controlled through the use of a 10 Ohm turn on
 resistor with a turn off diode to help guard against shoot-through and ensure
 that Miller current injection cannot turn on the IGBTs.
 
+\subsection{Desaturation Detection}
 Power stage desaturation is measured on the low side by use of a diode clamped
 connection to the switching node tied to the 15V gate supply.
 This signal is then buffered by a P-channel MOSFET before being fed into a
@@ -58,6 +59,10 @@ In the case of high side desaturation, the fault can only be detected if the
 switching node voltage drops below 15V.
 This sensor can also detect shorted power switches within one switching cycle
 due to state mismatch with the gate drive commands.
+
+This method requires minimal hardware but will allow the controller to detect
+a blown switch withing one switching cycle so long as the DC link voltage is
+above 15V.
 
 \section{Power Module}
 While the power rating for this design is only 18kW, the system design was
@@ -117,5 +122,36 @@ module adds a further layer of shielding, using eddy currents to block higher
 frequency interfering fields from the sensor.
 
 \section{DSP}
+DSP selection for this converter was primarily driven by thermal
+considerations. In to allow the possibility of operating with incoming coolant
+at 105C, the processor needed to be able to operate at 125C or greater ambient
+temperatures.
+
+At the time of design the only two options readily available were
+TMS320-series aerospace grade 200C processors from Texas Instruments or 140C
+rated dsPIC processors from Microchip. As this application requires
+approximately the same processing power as a standard three phase motor
+controller, the motor control dsPIC series processor is more than adequate.
+
+A benefit of this DSP is that it is available in a QFN package which is
+extremely helpful for the tight packaging requirements of this design.
 
 \section{Communications}
+Inter-module communications is one of most important variables in an
+integrated modular motor drive design. The minimum or optimal values for
+for intermodule communication are an item for future work. For this design, a
+combination of digital and analog communication was chosen.
+
+In order to allow reasonable sensing of the current vector, each module
+receives an analog current signal from two other modules.  One is another
+phase on the same star-connection in order to allow calculation of the
+complete current vector; the other is from an adjacent phase on the other
+star-connection which is used for fault-detection and monitoring.
+
+This analog communication is supplemented by a CAN bus operating at 1Mbps.
+This digital bus is used both for current vector command input and in order to
+share lower-bandwidth trimming values between modules.
+
+Each module outputs it's measured values for the three currents which is read
+by the other modules and used to close the loop on sensor gain and offset in
+order to make the sensor input for control operation identical for all phases.

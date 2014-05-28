@@ -1,0 +1,60 @@
+\documentclass[10pt,letterpaper]{IEEEtran}
+
+\usepackage{cite}
+\usepackage[cmex10]{amsmath}
+\usepackage{stfloats}
+\usepackage{url}
+\usepackage{graphicx}
+
+\begin{document}
+\title{Modeling Poly-Phase Capacitors in an Arbitrary Reference Frame}
+\author{Adam Shea}
+
+\maketitle
+
+\begin{abstract}
+\end{abstract}
+
+\section{Introduction}
+Poly-phase systems are commonly used in power conversion applications in order
+to take advantage of the improved power handling capabilities for a given
+voltage and current limit and the ability to make a rotating flux.
+
+
+\section{Complex Vector Formulation}
+For this paper we use the complex vector formulation described in
+\cite{Novotny} which maps an arbitrary balanced poly-phase system into the
+complex plane.
+Equation \ref{eqPark} shows how this is done for three phases.
+\begin{equation}
+\label{eqPark}
+f_{dq} = \frac{2}{3} \left({\alpha_a f_a + \alpha_b f_b + \alpha_c f_c}\right)
+\end{equation}
+The factor of $2 / 3$ causes the magnitude of the complex vector to be the
+same as the magnitude of any of the terminal quantities.
+This choice requires a factor of $3 / 2$ in order perform power calculations.
+Other options for this factor cause other invariants when performing system
+calculations.
+The coefficients $\alpha_n$ are the position of the phases in the given
+reference frame.
+This can be used with differing $\alpha_n$ on the same phase quantities in
+order to work in reference frames at different spatial and temporal
+frequencies. \cite{Rockhill}
+From this complex vector formulation, we can multiply by a fixed-speed
+rotating unit vector to obtain complex quantities in a rotating reference
+frame.
+
+\section{Capacitor Model}
+In this paper we are working with a three-phase star-connected capacitor with
+terminal quantities defined in the standard passive convention (voltages
+referenced phase-to-neutral, currents flowing into the phase terminals). 
+The capacitor voltage differential equations are then
+\begin{align}
+\frac{d V_{an}}{dt} &= \frac{I_a}{C} \\
+\frac{d V_{bn}}{dt} &= \frac{I_b}{C} \\
+\frac{d V_{cn}}{dt} &= \frac{I_c}{C}
+\end{align}
+
+\section{Conclusions}
+
+\end{document}

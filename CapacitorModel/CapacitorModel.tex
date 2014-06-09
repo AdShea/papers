@@ -21,13 +21,14 @@ to take advantage of the improved power handling capabilities for a given
 voltage and current limit and the ability to make a rotating flux.
 
 
+
 \section{Complex Vector Formulation}
 For this paper we use the complex vector formulation described in
-\cite{Novotny} which maps an arbitrary balanced poly-phase system into the
+\cite{NovotnyLipoBook} which maps an arbitrary balanced poly-phase system into the
 complex plane.
-Equation \ref{eqPark} shows how this is done for three phases.
+Equation \ref{eqClarke} shows how this is done for three phases \cite{Clarke51}.
 \begin{equation}
-\label{eqPark}
+\label{eqClarke}
 f_{dq} = \frac{2}{3} \left({\alpha_a f_a + \alpha_b f_b + \alpha_c f_c}\right)
 \end{equation}
 The factor of $2 / 3$ causes the magnitude of the complex vector to be the
@@ -39,7 +40,7 @@ The coefficients $\alpha_n$ are the position of the phases in the given
 reference frame.
 This can be used with differing $\alpha_n$ on the same phase quantities in
 order to work in reference frames at different spatial and temporal
-frequencies. \cite{Rockhill}
+frequencies. \cite{Rockhill09}
 From this complex vector formulation, we can multiply by a fixed-speed
 rotating unit vector to obtain complex quantities in a rotating reference
 frame.
@@ -55,6 +56,47 @@ The capacitor voltage differential equations are then
 \frac{d V_{cn}}{dt} &= \frac{I_c}{C}
 \end{align}
 
+We can then translate these into the stationary refrence frame as
+\begin{align}
+C \frac{d V_q^s}{dt} = I_q^s \\
+C \frac{d V_d^s}{dt} = I_d^s
+\end{align}
+which can be translated into intstantaneous complex variables in the
+stationary reference frame as
+\begin{equation}
+\label{eqStationary}
+C \frac{d V_{qd}^s}{dt} = I_{qd}^s
+\end{equation}
+
+Now, when transforming from the stationary to arbitrary reference frame we
+start with a transformed voltage and current such that
+\begin{equation}
+\label{eqRef}
+I_{qd}^\omega = I_{qd}^s e^{j\omega t}
+\end{equation}
+
+Substituting equation \ref{eqRef} into equation \ref{eqStationary} we get
+\begin{equation}
+C \frac{d}{dt} \left({V_{qd}^\omega e^{-j\omega t}}\right) = I_{qd}^\omega
+e^{-j\omega t}
+\end{equation}
+
+We then apply the chain rule in order to obtain
+\begin{equation}
+C \frac{d V_{qd}^\omega}{dt} = I_{qd}^\omega  - j
+\omega C V_{qd}^\omega
+\end{equation}
+which for $\omega = 0$ simplifies down to equation \ref{eqStationary}.
+
+The final $- j \omega C V_{qd}^\omega$ term is the speed current
+associated with the rotating reference frame.
+This is analogous to the speed voltage associated with currents found found in
+rotating magnetic machinery.
+
+
 \section{Conclusions}
+
+\bibliographystyle{IEEEtran}
+\bibliography{IEEEabrv,Cap}
 
 \end{document}

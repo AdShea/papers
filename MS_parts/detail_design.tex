@@ -33,7 +33,7 @@ jacket.
 \section{Gate Drivers}
 Gate drive design for a tightly integrated motor drive is primarily driven by
 a need for small size and high output current.
-In this design, the DC-Link voltage is less than 400V which allows the use of
+In this design, the DC-Link voltage is less than 600V which allows the use of
 commercial integrated bootstrap gate driver chips.
 
 The FAN7390 integrated bootstrap gate driver was chosen as it supplies peak
@@ -52,7 +52,7 @@ that Miller current injection cannot turn on the IGBTs.
 Power stage desaturation is measured on the low side by use of a diode clamped
 connection to the switching node tied to the 15V gate supply.
 This signal is then buffered by a P-channel MOSFET before being fed into a
-digital input to the DSP.
+digital input to the DSP as shown in figure \ref{figDesat}.
 In the case of lower switch desaturation, this input will remain low which
 indicates to the software that a fault has occurred.
 In the case of high side desaturation, the fault can only be detected if the
@@ -60,9 +60,18 @@ switching node voltage drops below 15V.
 This sensor can also detect shorted power switches within one switching cycle
 due to state mismatch with the gate drive commands.
 
+\begin{figure}[htbp]
+\centering
+\label{figDesat}
+\includegraphics[page=3,trim=8.1cm 13.8cm 21.7cm 13.55cm,clip,width=5in]{PCB}
+\caption{Schematic of desaturation detection circuit. Left end connects to
+switching node, right end to the DSP.}
+\end{figure}
+
 This method requires minimal hardware but will allow the controller to detect
 a blown switch withing one switching cycle so long as the DC link voltage is
 above 15V.
+
 
 \section{Power Module}
 While the power rating for this design is only 18kW, the system design was

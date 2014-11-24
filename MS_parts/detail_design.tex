@@ -12,6 +12,14 @@ and packaging or as some would say: "multiphysics integration".
 For this integrated modular drive design, the converter and all its controls
 will be mounted on the end of a 6-phase machine designed at 1/3 scale but full
 diameter for the FreedomCar/USDrive specification.
+This layout is shown in rendered view in Fig. \ref{figRender}
+\begin{figure}[htpb]
+	\centering
+	\label{figRender}
+	\includegraphics[trim=16cm 2cm 8cm
+	6cm,clip,width=\textwidth]{\detokenize{10kW_triview_w_ns}}
+	\caption{Rendered view of modular drive on machine.}
+\end{figure}
 
 In order to shield the drive from EMI and fringing fields from the machine,
 the drive is mounted on a stainless steel baseplate of the same footprint as
@@ -63,7 +71,7 @@ due to state mismatch with the gate drive commands.
 \begin{figure}[htbp]
 \centering
 \label{figDesat}
-\includegraphics[page=3,trim=8.1cm 13.8cm 21.7cm 13.55cm,clip,width=5in]{PCB}
+\includegraphics[page=3,trim=8.1cm 13.8cm 21.7cm 13.55cm,clip,width=\textwidth]{PCB}
 \caption{Schematic of desaturation detection circuit. Left end connects to
 switching node, right end to the DSP.}
 \end{figure}
@@ -115,6 +123,13 @@ aperture in the ground plane beneath it as is shown in figure
 The current in a conductor mounted a fixed distance away is then sensed by
 measuring the magnetic field impinging on the sensor.
 
+\begin{figure}[htbp]
+	\centering
+	\label{figHallPCB}
+	\includegraphics[width=\textwidth]{\detokenize{20110926_003}}
+	\caption{Side view of modular converter phase showing current sensor,
+	waterblock, and phase conductor layout.}
+\end{figure}
 The spacing between the sensor and current carrying conductor is managed by
 the bolt-together standoffs between the controller board and the power
 semiconductor module.
@@ -159,6 +174,15 @@ receives an analog current signal from two other modules.  One is another
 phase on the same star-connection in order to allow calculation of the
 complete current vector; the other is from an adjacent phase on the other
 star-connection which is used for fault-detection and monitoring.
+This connection was received through a differential amplifier with
+low-impedance termination possible if noise pickup becomes a problem.  The
+schematic of this receive amplifier is shown in Fig. \ref{figRecAmp}.
+\begin{figure}[htbp]
+	\centering
+	\label{figRecAmp}
+	\includegraphics[page=2,trim=3cm 11cm 21.2cm 12cm,clip,width=\textwidth]{PCB}
+	\caption{Left-adjacent current signal receive amplifier.}
+\end{figure}
 
 This analog communication is supplemented by a CAN bus operating at 1Mbps.
 This digital bus is used both for current vector command input and in order to

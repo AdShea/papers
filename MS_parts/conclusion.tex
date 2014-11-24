@@ -1,13 +1,43 @@
 \chapter{Conclusions}
 
 \section{Contributions}
+This work has implemented a prototype hardware, tested current sensing with a
+free-field sensor, discovered issues with interconnect fragility, identified a
+path forward for controls development.
 
 \section{Future Work}
 
 \subsection{Multi-phase IMMD}
+While the one phase per controller drive shown here provides significant gains
+in redundancy, multi-phase per controller modular designs show promise for
+simplifying the control of very large machines by allowing reduced converter
+complexity and wider application of commodity power switching components.
+Furthermore, having multiple phase voltages controlled by one controller
+significantly reduces the communications and coordination overhead in the
+system.
+
 
 \subsection{EMI analysis}
+Further work on EMI analysis is needed both in emission and susceptibility for
+tightly integrated motors and drives.
+This prototype implemented a few rules of thumb to allow the drive to operate,
+but there may be significant possible savings in weight and volume if the
+large baseplate can be eliminated.
+Furthermore, the savings in shielded cabling allowed by no longer having long
+motor phase leads with large dV/dt waveforms may make tightly integrated
+drives attractive to many applications.
 
 \subsection{Control Development}
+This work did not succeed in implementing high-bandwidth vector control.
+The most significant challenge is managing sensor tolerances in order to have
+all phases share power handling equally as independent controllers are not
+inherently symmetrical and can easily turn sensor errors into negative
+sequence components in the machine currents.
 
 \subsection{High-temperature Testing}
+This controller design was chosen with high temperature coolant in mind as
+multiple coolant loops are a significant overhead in current hybrid and
+electric vehicle designs.
+This design should be run at high temperature to determine where the actual
+thermal bottlenecks are so future designs can allow shared coolant between
+the drive and other system components.

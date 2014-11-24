@@ -31,7 +31,7 @@ advanced integrated drive architectures has been limited to date.
 
 One of these advanced concepts that has been proposed in the literature is the
 integrated modular motor drive (IMMD) .
-As illustrated in Fig. 1, this
+As illustrated in Fig. \ref{figCPESIMMD}, this
 concept segments the stator into individual pole pieces, each encircled by a
 concentrated winding that is excited by its own dedicated electronics unit
 that includes both the necessary power electronics and controls to form a
@@ -43,8 +43,6 @@ opportunities for improved manufacturability, enhanced fault tolerance and
 redundancy, and simplified repair/replacement of the pole-drive units.
 
 \section{Motivation}
-
-
 
 \subsection{Reliability and Redundancy}
 As electric drive systems move into many power and actuation applications
@@ -91,7 +89,22 @@ healthy phases.
 More recent related research has been undertaken at WEMPEC in the area of
 modular converter integration.
 
-Nate Brown and 
+Recently Nate Brown and others \cite{Brown07a} have demonstrated a fully
+modular machine consisting of tooth-wound SMC pole pieces coupled to a
+modularized inverter.
+\begin{figure}[htbp]
+\centering
+\label{figCPESIMMD}
+\includegraphics[width=5in]{IMMD3k}
+\caption{Rendered views of 5-phase SMC modular motor drive.}
+\end{figure}
+The entire machine and drive are air cooled by drawing air first through the
+inverter poles then through the machine airgap and slots.
+The controls on this machine however are still fully centralized.
+
+This modular inverter also demonstrated the difficulties in modular drive
+interconnect as its phase and power connections developed intermittent faults
+after a relatively short operating life.
 
 
 \subsection{Machine Design}
@@ -109,4 +122,18 @@ debugging.
 
 
 \subsection{Current Sensing}
+Accurate current sensing is a vital component of high-performance motor
+controls.  Often this is accomplished through the use of transformer-based
+hall-effect sensors.  Sadly, for an integrated application these sensors are
+both highly temperature sensitive and too large.
+
+A much more compact current sensing method involves the use of free-space
+magnetic field sensors in fixed position relative to a current carrying
+conductor.
+This approach allows both small-size and high bandwidth as current sensor core
+materials do not come into play.
+In \cite{Schneider10} GMR sensors are used as they allow for extremely large
+bandwidth (into the MHz range).
+These sensors are however unipolar and biasing magnet requirements offset some
+of the thermal stability gains.
 

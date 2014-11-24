@@ -1,6 +1,44 @@
 \chapter{Abstract Design}
 
 \section{Control Topology}
+While the controls topology is not a primary focus of this thesis, it is an
+essential driver of the converter design.
+
+The starting requirements in the controls design for this project was to
+eliminate as many single-points of failure as possible using a separate
+controller per-phase.
+
+This approach immediately drives a few control topology decisions.  First,
+typical AC drive algorithms require knowledge of the complete state of the
+machine in order to generate commands.
+This would either necessitate either a very fast and tightly coupled
+communication structure or some method to decouple the controls from some of
+the machine states.
+As we are using a machine with 6 phases to allow for fault tolerance,
+broadcasting current sensor information each cycle would already overwhelm a
+typical CAN network.
+To avoid this problem we use the dual-wye connection of the drive and have
+each phase module sense only 3 currents: Its own, one on the same wye, and one
+on the opposite wye.
+Standard 3-phase drives already use a variant of this method by only sensing
+two currents for control.
+This allows a single phase controller to have a full view of the currents in
+its wye while monitoring the other wye for faults.
+
+By symmetry, running an identical control algorithm for each phase and picking
+the correct voltage output will allow standard vector control concepts to be
+used with minimal overhead.
+The variations in input sensors however will need to be corrected for and some
+effort will be required to achieve good power balance between phases.
+
+Position sensing is also a problem and presents a single-point failure
+mechanism.
+For this work we are simply using a standard position sensor though standard
+resolver concepts can be extended to allow for each phase module to have its
+own resolver stator while using the same rotor.
+
+For this work, we will be staring with V/Hz control as this is relatively
+robust and easy to implement with limited feedback required.
 
 
 \subsection{Non-synchronized PWM}
@@ -49,11 +87,43 @@ will suffer if the DC-Link voltage variation is not decoupled.
 
 A final rule of thumb is to size the DC-link capacitance to be thermally rated
 for a ripple current that is a given fraction of the converter's rated output
-current (typically one third for common 3-phase converters).
+current (typically two thirds the RMS phase current for common 3-phase
+converters).
 This is a very robust rule in terms of managing component lifetime, but may
 cause excess DC-Link voltage ripple if polymer film-based capacitors are used
 due to their excellent current handling capability even at low capacitance
 ratings.
+
+The matter of the precise spectrum of DC-link current is treated well in
+\cite{McGrath09} where the current from a switching converter is calculated by
+convolving the output current with the switching voltage waveform.
+This approach confirms the two-thirds sizing rule for conventional three-phase
+2-level VSI converters and adds the insight of how specific frequency
+components are related between phases.
+
+Fig. \ref{fig3phCur} shows how the RMS ripple current is effected by changes
+in both modulation index and the output power factor of a three-phase
+converter.
+This plot is delineated as a ratio of RMS phase current to RMS DC-link ripple.
+The worst-case is at approximately a 0.6 modulation index with unity power
+factor (either motoring or generating).
+This plot also clearly shows that it is the switches, not the DC-link
+capacitor that circulates energy when a converter is operating at low power
+factor.
+
+\begin{figure}[htbp]
+\centering
+\label{fig3phCur}
+\includegraphics[width=\textwidth]{DC3phRipple}
+\caption{DC-link ripple current for a three-phase, two-level VSI operating
+without higher harmonic injection.  Contour lines delineate ratio of RMS phase
+current to RMS ripple current.}
+\end{figure}
+
+The main takeaway from this is that the interconnect between phases should
+have lower impedance than the interconnect between any single phase and the
+DC-source in order to allow cancellation of modulation-referenced ripple while
+the capacitors must be sized to handle switching-referenced ripple.
 
 These three rules all encapsulate both their driving assumptions the two
 actual drivers of DC-link design.
@@ -101,6 +171,15 @@ To this end, the DC-link capacitance is split into three parts on each module:
 A bulk polyproylene film capacitor, a pair of multilayer ceramic capacitors,
 and an integrated PCB capacitor.
 
+The overall DC-link layout is shown in Fig. \ref{figInverterLayout}.
+
+\begin{figure}[htbp]
+	\centering
+	\label{figInverterLayout}
+	\includegraphics[width=\textwidth]{\detokenize{power_inverter}}
+	\caption{Schematic showing interconnection of power inverter and
+	machine.}
+\end{figure}
 
 \subsection{Capacitor Sizing}
 Capacitor sizing was based entirely on current handling capability and size
